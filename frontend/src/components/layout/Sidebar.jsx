@@ -70,8 +70,7 @@ const Sidebar = () => {
       return;
     }
 
-    const { error } =
-      await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
 
     if (error) {
       alert(error.message);
@@ -82,7 +81,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 min-h-screen bg-blue-800 text-white relative flex flex-col">
+    <aside className="w-64 min-w-[16rem] shrink-0 h-screen sticky top-0 bg-blue-800 text-white flex flex-col">
 
       {/* ======================================
           LOGO
@@ -116,7 +115,7 @@ const Sidebar = () => {
           NAVIGATION
       ====================================== */}
 
-      <div className="mt-5 px-3">
+      <nav className="mt-5 px-3 flex-1">
 
         {menus.map((menu) => (
 
@@ -144,13 +143,13 @@ const Sidebar = () => {
 
         ))}
 
-      </div>
+      </nav>
 
       {/* ======================================
           LOGOUT
       ====================================== */}
 
-      <div className="mt-auto p-5">
+      <div className="p-5">
 
         <button
           onClick={handleLogout}
@@ -167,7 +166,7 @@ const Sidebar = () => {
 
       </div>
 
-    </div>
+    </aside>
   );
 };
 

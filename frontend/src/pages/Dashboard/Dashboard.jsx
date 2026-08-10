@@ -61,30 +61,17 @@ const Dashboard = () => {
         getAIReports(),
       ]);
 
-      setHospitals(
-        hospitalResponse.hospitals || []
-      );
+      setHospitals(hospitalResponse.hospitals || []);
 
-      setDepartments(
-        departmentResponse.departments || []
-      );
+      setDepartments(departmentResponse.departments || []);
 
-      setInspections(
-        inspectionResponse.inspections || []
-      );
+      setInspections(inspectionResponse.inspections || []);
 
-      setFindings(
-        findingResponse.findings || []
-      );
+      setFindings(findingResponse.findings || []);
 
-      setAIReports(
-        aiReportResponse.reports || []
-      );
+      setAIReports(aiReportResponse.reports || []);
     } catch (error) {
-      console.error(
-        "Dashboard Error:",
-        error
-      );
+      console.error("Dashboard Error:", error);
     } finally {
       setLoading(false);
     }
@@ -130,12 +117,8 @@ const Dashboard = () => {
   const scoreData = [...inspections]
     .sort(
       (a, b) =>
-        new Date(
-          a.inspection_date
-        ) -
-        new Date(
-          b.inspection_date
-        )
+        new Date(a.inspection_date) -
+        new Date(b.inspection_date)
     )
     .slice(-8)
     .map((inspection) => ({
@@ -143,30 +126,23 @@ const Dashboard = () => {
         inspection.inspector_name ||
         "Inspection",
       score:
-        Number(
-          inspection.overall_score
-        ) || 0,
+        Number(inspection.overall_score) || 0,
     }));
 
   // ======================================
   // STATISTICS
   // ======================================
-  const criticalFindings =
-    findings.filter(
-      (finding) =>
-        finding.severity === "Critical" ||
-        finding.severity === "High"
-    ).length;
+  const criticalFindings = findings.filter(
+    (finding) =>
+      finding.severity === "Critical" ||
+      finding.severity === "High"
+  ).length;
 
   const scores = inspections
     .map((inspection) =>
-      Number(
-        inspection.overall_score
-      )
+      Number(inspection.overall_score)
     )
-    .filter(
-      (score) => !isNaN(score)
-    );
+    .filter((score) => !isNaN(score));
 
   const averageScore =
     scores.length > 0
@@ -182,20 +158,19 @@ const Dashboard = () => {
   // ======================================
   // RECENT INSPECTIONS
   // ======================================
-  const recentInspections =
-    [...inspections]
-      .sort(
-        (a, b) =>
-          new Date(
-            b.created_at ||
-              b.inspection_date
-          ) -
-          new Date(
-            a.created_at ||
-              a.inspection_date
-          )
-      )
-      .slice(0, 5);
+  const recentInspections = [...inspections]
+    .sort(
+      (a, b) =>
+        new Date(
+          b.created_at ||
+            b.inspection_date
+        ) -
+        new Date(
+          a.created_at ||
+            a.inspection_date
+        )
+    )
+    .slice(0, 5);
 
   // ======================================
   // DASHBOARD CARDS
@@ -236,19 +211,28 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen w-full bg-gray-100 overflow-hidden">
+
+      {/* ======================================
+          SIDEBAR
+      ====================================== */}
 
       <Sidebar />
 
-      <div className="flex-1">
+      {/* ======================================
+          MAIN CONTENT
+      ====================================== */}
+
+      <div className="flex-1 min-w-0 flex flex-col">
 
         <Header />
 
-        <main className="p-8">
+        <main className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden p-8">
 
           {/* ======================================
               TITLE
           ====================================== */}
+
           <div className="mb-8">
 
             <h1 className="text-3xl font-bold text-gray-800">
@@ -264,7 +248,8 @@ const Dashboard = () => {
           {/* ======================================
               STAT CARDS
           ====================================== */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
             {cards.map((card) => (
 
@@ -304,7 +289,10 @@ const Dashboard = () => {
           {/* ======================================
               SUMMARY CARDS
           ====================================== */}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+
+            {/* Average Score */}
 
             <div className="bg-white rounded-xl shadow-lg p-6">
 
@@ -331,6 +319,8 @@ const Dashboard = () => {
               </div>
 
             </div>
+
+            {/* Critical Findings */}
 
             <div className="bg-white rounded-xl shadow-lg p-6">
 
@@ -363,10 +353,12 @@ const Dashboard = () => {
           {/* ======================================
               CHARTS
           ====================================== */}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
 
             {/* Inspection Score Chart */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
+
+            <div className="bg-white rounded-xl shadow-lg p-6 min-w-0">
 
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 Inspection Score Overview
@@ -435,7 +427,8 @@ const Dashboard = () => {
             </div>
 
             {/* Findings Severity Chart */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
+
+            <div className="bg-white rounded-xl shadow-lg p-6 min-w-0">
 
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 Findings by Severity
@@ -511,6 +504,7 @@ const Dashboard = () => {
           {/* ======================================
               RECENT INSPECTIONS
           ====================================== */}
+
           <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
 
             <h2 className="text-xl font-bold text-gray-800">
@@ -667,6 +661,7 @@ const Dashboard = () => {
           {/* ======================================
               FINDINGS SUMMARY
           ====================================== */}
+
           <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
 
             <h2 className="text-xl font-bold text-gray-800 mb-5">
@@ -674,6 +669,8 @@ const Dashboard = () => {
             </h2>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+              {/* Total */}
 
               <div className="bg-gray-50 rounded-lg p-4">
 
@@ -689,6 +686,8 @@ const Dashboard = () => {
 
               </div>
 
+              {/* Low */}
+
               <div className="bg-green-50 rounded-lg p-4">
 
                 <p className="text-gray-500 text-sm">
@@ -703,6 +702,8 @@ const Dashboard = () => {
 
               </div>
 
+              {/* Medium */}
+
               <div className="bg-yellow-50 rounded-lg p-4">
 
                 <p className="text-gray-500 text-sm">
@@ -716,6 +717,8 @@ const Dashboard = () => {
                 </p>
 
               </div>
+
+              {/* High / Critical */}
 
               <div className="bg-red-50 rounded-lg p-4">
 
