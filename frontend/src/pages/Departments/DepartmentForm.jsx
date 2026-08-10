@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+
 import {
   createDepartment,
   updateDepartment,
 } from "../../services/departmentService";
+
 import { getHospitals } from "../../services/hospitalService";
 
 const emptyForm = {
@@ -13,40 +15,68 @@ const emptyForm = {
 
 const DepartmentForm = ({ department, onSuccess }) => {
   const [formData, setFormData] = useState(emptyForm);
+
   const [hospitals, setHospitals] = useState([]);
+
   const [loading, setLoading] = useState(false);
-  const [loadingHospitals, setLoadingHospitals] = useState(true);
+
+  const [loadingHospitals, setLoadingHospitals] =
+    useState(true);
 
   const isEditMode = Boolean(department);
 
+  // ======================================
+  // LOAD HOSPITALS
+  // ======================================
   useEffect(() => {
     fetchHospitals();
   }, []);
 
+  // ======================================
+  // SET EDIT DATA
+  // ======================================
   useEffect(() => {
     if (department) {
       setFormData({
-        hospital_id: department.hospital_id || "",
-        department_name: department.department_name || "",
-        head_of_department: department.head_of_department || "",
+        hospital_id:
+          department.hospital_id || "",
+
+        department_name:
+          department.department_name || "",
+
+        head_of_department:
+          department.head_of_department || "",
       });
     } else {
       setFormData(emptyForm);
     }
   }, [department]);
 
+  // ======================================
+  // FETCH HOSPITALS
+  // ======================================
   const fetchHospitals = async () => {
     try {
       const response = await getHospitals();
-      setHospitals(response.hospitals || []);
+
+      setHospitals(
+        response.hospitals || []
+      );
     } catch (error) {
-      console.error("Fetch Hospitals Error:", error);
+      console.error(
+        "Fetch Hospitals Error:",
+        error
+      );
+
       alert("Failed to load hospitals");
     } finally {
       setLoadingHospitals(false);
     }
   };
 
+  // ======================================
+  // HANDLE INPUT
+  // ======================================
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -54,6 +84,9 @@ const DepartmentForm = ({ department, onSuccess }) => {
     });
   };
 
+  // ======================================
+  // SUBMIT
+  // ======================================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -66,11 +99,20 @@ const DepartmentForm = ({ department, onSuccess }) => {
       setLoading(true);
 
       if (isEditMode) {
-        await updateDepartment(department.id, formData);
-        alert("Department updated successfully");
+        await updateDepartment(
+          department.id,
+          formData
+        );
+
+        alert(
+          "Department updated successfully"
+        );
       } else {
         await createDepartment(formData);
-        alert("Department added successfully");
+
+        alert(
+          "Department added successfully"
+        );
       }
 
       setFormData(emptyForm);
@@ -79,7 +121,10 @@ const DepartmentForm = ({ department, onSuccess }) => {
         onSuccess();
       }
     } catch (error) {
-      console.error("Department Error:", error);
+      console.error(
+        "Department Error:",
+        error
+      );
 
       if (error.response) {
         alert(
@@ -100,10 +145,15 @@ const DepartmentForm = ({ department, onSuccess }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4"
+      className="space-y-5"
     >
-      {/* Hospital */}
+
+      {/* ======================================
+          HOSPITAL
+      ====================================== */}
+
       <div>
+
         <label className="block mb-2 font-medium text-gray-700">
           Hospital
         </label>
@@ -116,6 +166,7 @@ const DepartmentForm = ({ department, onSuccess }) => {
           required
           disabled={loadingHospitals}
         >
+
           <option value="">
             {loadingHospitals
               ? "Loading hospitals..."
@@ -130,11 +181,17 @@ const DepartmentForm = ({ department, onSuccess }) => {
               {hospital.hospital_name}
             </option>
           ))}
+
         </select>
+
       </div>
 
-      {/* Department Name */}
+      {/* ======================================
+          DEPARTMENT NAME
+      ====================================== */}
+
       <div>
+
         <label className="block mb-2 font-medium text-gray-700">
           Department Name
         </label>
@@ -148,10 +205,15 @@ const DepartmentForm = ({ department, onSuccess }) => {
           className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
+
       </div>
 
-      {/* Head of Department */}
+      {/* ======================================
+          HEAD OF DEPARTMENT
+      ====================================== */}
+
       <div>
+
         <label className="block mb-2 font-medium text-gray-700">
           Head of Department
         </label>
@@ -160,16 +222,24 @@ const DepartmentForm = ({ department, onSuccess }) => {
           type="text"
           name="head_of_department"
           placeholder="Example: Dr. Ramesh"
-          value={formData.head_of_department}
+          value={
+            formData.head_of_department
+          }
           onChange={handleChange}
           className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
         />
+
       </div>
 
-      {/* Submit */}
+      {/* ======================================
+          SUBMIT
+      ====================================== */}
+
       <button
         type="submit"
-        disabled={loading || loadingHospitals}
+        disabled={
+          loading || loadingHospitals
+        }
         className="w-full bg-blue-700 text-white py-3 rounded-lg hover:bg-blue-800 disabled:opacity-50"
       >
         {loading
@@ -178,6 +248,7 @@ const DepartmentForm = ({ department, onSuccess }) => {
           ? "Update Department"
           : "Add Department"}
       </button>
+
     </form>
   );
 };
