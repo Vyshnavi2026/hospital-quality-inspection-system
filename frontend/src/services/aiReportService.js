@@ -1,12 +1,17 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/ai-reports";
+// ======================================
+// BACKEND API URL
+// ======================================
+const API_URL =
+  "https://hospital-quality-inspection-system.onrender.com/api/ai-reports";
 
 // ======================================
 // GET ALL AI REPORTS
 // ======================================
 export const getAIReports = async () => {
   const response = await axios.get(API_URL);
+
   return response.data;
 };
 

@@ -1,9 +1,17 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/ai-generation";
+// ======================================
+// BACKEND API URL
+// ======================================
+const API_URL =
+  "https://hospital-quality-inspection-system.onrender.com/api/ai-generation";
 
-// Generate AI report for an inspection
-export const generateAIReport = async (inspection_id) => {
+// ======================================
+// GENERATE AI REPORT
+// ======================================
+export const generateAIReport = async (
+  inspection_id
+) => {
   const response = await axios.post(
     `${API_URL}/generate`,
     {
